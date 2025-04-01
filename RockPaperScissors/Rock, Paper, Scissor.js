@@ -10,11 +10,23 @@ function game() {
 }
 
 
-function generator() {
-    const radomIndex = Math.floor(Math.random() * Array.length) ;
-    return array[randomIndex];
 
-}
-const myArray = ["rock", "paper", "scissors"];
-const randomString = Generator(myArray);
-document.write(randomString);
+
+
+function getRandomString(arr) {
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+  }
+  
+  
+  const myArray = ["rock", "rock", "rock"];
+  const randomString = getRandomString(myArray);
+  console.log(randomString);
+
+
+  function userInput() {
+    let rock = document.getElementById("rockBut");
+    if (randomString == "rock") {
+      console.log("holy cow it work")
+    }
+  }
