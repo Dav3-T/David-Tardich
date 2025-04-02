@@ -29,7 +29,7 @@ function getRandomString(arr) {
 
   function scissorInput() {
     let rock = document.getElementById("scissorBut");
-    if (randomString == "scissor") {
+    if (randomString == "scissors") {
       document.write("You did it! It was in fact scissors.");
     } else {
       document.write("You got it wrong. Refresh and try again. <br/> Your punishment is ripping wrapping paper when you try to cut it.");
