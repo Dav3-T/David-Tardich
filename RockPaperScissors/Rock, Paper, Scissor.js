@@ -1,32 +1,37 @@
-//NOT DONE, make it so that it makes sense for rps and make it work lol
-function game() {
-    if (userInput == randNum) {
-        updateHTML("ChangingText", "you got it right, the number was " + randNum);
-        console.log("check1");
-      } else {
-        updateHTML("ChangingText", "you got it wrong.");
-        console.log("they did bad");
-      }
-}
-
-
-
-
-
 function getRandomString(arr) {
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
   }
   
   
-  const myArray = ["rock", "rock", "rock"];
+  const myArray = ["rock", "scissors", "paper"];
   const randomString = getRandomString(myArray);
   console.log(randomString);
 
 
-  function userInput() {
+  function rockInput() {
     let rock = document.getElementById("rockBut");
     if (randomString == "rock") {
-      console.log("holy cow it work")
+      document.write("You did it! It was in fact rock.");
+    } else {
+      document.write("You got it wrong. Refresh and try again. <br/> Your punishment is dropping a rock on your foot.");
+    }
+  }
+
+  function paperInput() {
+    let rock = document.getElementById("paperBut");
+    if (randomString == "paper") {
+      document.write("You did it! It was in fact paper.");
+    } else {
+      document.write("You got it wrong. Refresh and try again. <br/> Your punishment is a papercut.");
+    }
+  }
+
+  function scissorInput() {
+    let rock = document.getElementById("scissorBut");
+    if (randomString == "scissor") {
+      document.write("You did it! It was in fact scissors.");
+    } else {
+      document.write("You got it wrong. Refresh and try again. <br/> Your punishment is ripping wrapping paper when you try to cut it.");
     }
   }
