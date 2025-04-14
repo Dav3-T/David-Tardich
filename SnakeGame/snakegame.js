@@ -4,8 +4,8 @@ const ctx = canvas.getContext("2d");
 const tileSize = 20;
 const gridSize = canvas.width / tileSize;
 
-let snake = [{ x: 5, y: 5}];
-let food = {x: 10, y: 10};
+let snake = [{ x: 5, y: 5 }];
+let food = { x: 10, y: 10 };
 let direction = "right";
 
 function drawSnake() {
@@ -21,7 +21,7 @@ function drawFood() {
 }
 
 function moveSnake() {
-    const head = { ...snake[0] }
+    const head = { ...snake[0] };
 
     switch (direction) {
         case "up":
@@ -71,7 +71,7 @@ function checkCollisions() {
 function resetGame() {
     alert("Game over! Restarting...");
     snake = [{ x: 5, y: 5}];
-    direction = "right"
+    direction = "right";
     generateFood();
 }
 
@@ -100,6 +100,6 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-setInterval(updateGame, 100)
+setInterval(updateGame, 100);
 
 generateFood();
