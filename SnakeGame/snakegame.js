@@ -102,6 +102,6 @@
         }
     });
     //slowed down the game to make it easier
-    setInterval(updateGame, 2000);
+    setInterval(updateGame, 150);
 
     generateFood();
