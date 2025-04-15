@@ -5,7 +5,8 @@
     const gridSize = canvas.width / tileSize;
 
     let snake = [{ x: 5, y: 5 }];
-    let food = { x: 10, y: 10 };
+    let food1 = { x: 10, y: 10 };
+    let food2 = { x: 15, y: 15 };
     let direction = "right";
 
     function drawSnake() {
@@ -16,9 +17,14 @@
         });
     }
 
-    function drawFood() {
+    function drawFood1() {
         ctx.fillStyle = "red";
-        ctx.fillRect(food.x * tileSize, food.y * tileSize,  tileSize, tileSize);
+        ctx.fillRect(food1.x * tileSize, food1.y * tileSize,  tileSize, tileSize);
+    }
+
+    function drawFood2() {
+        ctx.fillStyle = "red";
+        ctx.fillRect(food2.x * tileSize, food2.y * tileSize,  tileSize, tileSize);
     }
 
     function moveSnake() {
@@ -41,15 +47,29 @@
 
         snake.unshift(head);
 
-        if (head.x === food.x && head.y === food.y) {
+        if (head.x === food1.x && head.y === food1.y) {
+            generateFood();
+        } else {
+            snake.pop();
+        }
+
+        if (head.x === food2.x && head.y === food2.y) {
             generateFood();
         } else {
             snake.pop();
         }
     }
 
-    function generateFood() {
-        food = {
+    function generateFood1() {
+        food1 = {
+            x: Math.floor(Math.random() * gridSize),
+            y: Math.floor(Math.random() * gridSize)
+        };
+        console.log("nom nom");
+    }
+
+    function generateFood2() {
+        food2 = {
             x: Math.floor(Math.random() * gridSize),
             y: Math.floor(Math.random() * gridSize)
         };
@@ -80,7 +100,8 @@
     function updateGame() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawSnake();
-        drawFood();
+        drawFood1();
+        drawFood2();
         moveSnake();
         checkCollisions();
     }
@@ -104,4 +125,5 @@
     //slowed down the game to make it easier
     setInterval(updateGame, 150);
 
-    generateFood();
+    generateFood1();
+    generateFood2();
