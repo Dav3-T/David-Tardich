@@ -4,6 +4,17 @@
     const tileSize = 20;
     const gridSize = canvas.width / tileSize;
 
+
+    let count = 0; // Global variable to track the score
+
+function counter() {
+    count++; // Increment the count
+    document.getElementById("appleCounter").innerHTML = `score: ${count}`;
+    console.log("Apple eaten: " + count);
+    {}
+}
+
+
     let snake = [{ x: 5, y: 5 }];
     let food1 = { x: 10, y: 10 };
     let food2 = { x: 15, y: 15 };
@@ -48,13 +59,11 @@
         snake.unshift(head);
 
         if (head.x === food1.x && head.y === food1.y) {
-            generateFood();
-        } else {
-            snake.pop();
-        }
-
-        if (head.x === food2.x && head.y === food2.y) {
-            generateFood();
+            generateFood1();
+            counter();
+        } else if (head.x === food2.x && head.y === food2.y) {
+            generateFood2();
+            counter();
         } else {
             snake.pop();
         }
@@ -78,33 +87,50 @@
 
     function checkCollisions() {
         const head = snake[0];
+
         console.log("checK");
-        if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
+        if ( head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize ) {
             resetGame();
+            count = 0; // Reset the score
+            document.getElementById("appleCounter").innerHTML = `score: ${count}`;
         }
 
         for (let i = 1; i < snake.length; i++) {
             if (head.x === snake[i].x && head.y === snake[i].y) {
                 resetGame();
+                count = 0;
+                document.getElementById("appleCounter").innerHTML = `score: ${count}`;
             }
         }
     }
 
     function resetGame() {
         alert("Game over! Restarting...");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         snake = [{ x: 5, y: 5}];
         direction = "right";
-        generateFood();
+        generateFood1();
+        generateFood2();
     }
 
-    function updateGame() {
+    function gameLoop() {
+        // Clear the canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+        // Move the snake
+        moveSnake();
+    
+        // Redraw the snake and food
         drawSnake();
         drawFood1();
         drawFood2();
-        moveSnake();
         checkCollisions();
+        // Call the game loop again after a delay
+        setTimeout(gameLoop, 100); // Adjust the delay for game speed
     }
+    
+    // Start the game loop
+    gameLoop();
 
     document.addEventListener("keydown", (event) => {
         switch (event.key) {
@@ -122,8 +148,13 @@
                 break;
         }
     });
+
+
+
     //slowed down the game to make it easier
-    setInterval(updateGame, 150);
+    
 
     generateFood1();
     generateFood2();
+
+    
