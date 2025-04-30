@@ -187,6 +187,7 @@ function scoreCounter() {if (ball.x - ball.radius <= 0 || ball.x + ball.radius >
 }
 }
 
+
 function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
     Player1draw(); 
@@ -199,4 +200,5 @@ function updateGame() {
     moveBall();
     requestAnimationFrame(updateGame); 
 }
+
 updateGame();
