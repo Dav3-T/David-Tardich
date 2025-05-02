@@ -133,8 +133,6 @@ function drawBall() {
     ctx.stroke();
 }
 
-
-
 function moveBall() {
     ball.x += ball.dx;
     ball.y += ball.dy;
