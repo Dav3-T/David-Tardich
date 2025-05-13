@@ -46,7 +46,7 @@ let spaceship = {
 function drawSpaceship() {
     ctx.save();
     ctx.translate(spaceship.x, spaceship.y);
-    ctx.rotate(spaceship.angle - 17.3);
+    ctx.rotate(spaceship.angle - 17.29);
     ctx.fillStyle = 'blue';
     ctx.beginPath();
     ctx.moveTo(0, -15); // Nose of the spaceship
@@ -118,8 +118,24 @@ function checkCollisions() {
             spaceship.bullets.splice(i, 1);
             i--;
             breakAsteroid();
+        
+         for (let j = 0; j < asteroidPieces.length; j++) {
+            let piece = asteroidPieces[j];
+            if (
+                bullet.x > piece.x &&
+                bullet.x < piece.x + piece.size && // Corrected
+                bullet.y > piece.y &&
+                bullet.y < piece.y + piece.size   // Corrected
+            ) {
+                console.log("Collision detected!");
+                spaceship.bullets.splice(i, 1);
+                asteroidPieces.splice(j, 1);
+                i--; // Adjust bullet index
+                break; // Exit the inner loop
+            }
         }
     }
+}
 }
 
 // Break asteroid into smaller pieces
@@ -139,6 +155,7 @@ function breakAsteroid() {
     asteroidY = Math.random() * canvas.height;
 }
 
+
 // Draw asteroid pieces
 function drawAsteroidPieces() {
     for (let i = 0; i < asteroidPieces.length; i++) {
@@ -152,8 +169,29 @@ function drawAsteroidPieces() {
         if (piece.x < 0) piece.x = canvas.width;
         if (piece.y > canvas.height) piece.y = 0;
         if (piece.y < 0) piece.y = canvas.height;
+
+        
     }
 }
+
+// Break asteroid into smaller pieces
+function breakAsteroid() {
+    let pieceCount = 3; // Number of pieces
+    for (let i = 0; i < pieceCount; i++) {
+        asteroidPieces.push({
+            x: asteroidX,
+            y: asteroidY,
+            dx: (Math.random() - 0.5) * 6,
+            dy: (Math.random() - 0.5) * 6,
+            size: asteroidImage.width / 2
+        });
+    }
+    asteroidX = Math.random() * canvas.width; // Reset main asteroid
+    asteroidY = Math.random() * canvas.height;
+
+
+}
+
 
 // Update spaceship position
 function updateSpaceship() {
