@@ -4,6 +4,9 @@ const ctx = canvas.getContext('2d');
 let asteroidImage = new Image();
 asteroidImage.src = "pixil-frame-0.png";
 
+let spaceshipExplosion = new Image();
+spaceshipExplosion.src = "pixil-frame-0 (1).png";
+
 let asteroidX = 0; 
 let asteroidY = 200; 
 let asteroidSpeed = 1; 
@@ -131,7 +134,11 @@ function checkCollisions() {
                 bullet.x > piece.x &&
                 bullet.x < piece.x + piece.size &&
                 bullet.y > piece.y &&
-                bullet.y < piece.y + piece.size
+                bullet.y < piece.y + piece.size ||
+                spaceship.x > piece.x &&
+                spaceship.x < piece.x + piece.size &&
+                spaceship.y > piece.y &&
+                spaceship.y < piece.y + piece.size
             ) {
                 score += 100;
                 document.getElementById("Score").innerHTML = `${score}`;
@@ -142,6 +149,25 @@ function checkCollisions() {
                 break; 
             }
         }
+    }
+
+   
+    if (
+        spaceship.x > asteroidX &&
+        spaceship.x < asteroidX + asteroidImage.width &&
+        spaceship.y > asteroidY &&
+        spaceship.y < asteroidY + asteroidImage.height 
+    ) {
+        
+        ctx.drawImage(spaceshipExplosion, spaceship.x - spaceshipExplosion.width / 2, spaceship.y - spaceshipExplosion.height / 2);
+        
+        setTimeout(() => {
+            
+           alert("Game Over! Your score: " + score);
+        }, 500);
+         document.location.reload();
+        
+        return;
     }
 }
 
