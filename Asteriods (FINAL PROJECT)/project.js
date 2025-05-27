@@ -11,7 +11,7 @@ spaceshipExplosion.src = "pixil-frame-0 (1).png";
 
 let asteroidX = 0; 
 let asteroidY = 200; 
-let asteroidSpeed = 1; 
+let asteroidSpeed = .5; 
 let score = 0; 
  
 //draws asteroid and makes it wrap around the screen
@@ -39,11 +39,11 @@ function drawAsteroid() {
 
 
 let asteroids = [];
-let round = 1;
+
 
 function spawnAsteroids() {
     asteroids = [];
-    for (let i = 0; i < 3 * round; i++) {
+    
         asteroids.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
@@ -51,7 +51,7 @@ function spawnAsteroids() {
             dy: (Math.random() - 0.5) * 2,
             size: asteroidImage.width
         });
-    }
+    
 }
 
 function drawAsteroids() {
@@ -115,8 +115,8 @@ let spaceship = {
     angle: 0,
     speed: 0,
     rotationSpeed: 0.3,
-    acceleration: 0.2,
-    bullets: []
+    acceleration: 0.3,
+    bullets: [],
 };
 
 
@@ -138,11 +138,14 @@ function drawSpaceship() {
 
 //controls spaceship movement and shooting
 
+//now i did something a bit strange. In order to turn, you must be moving. 
+//This is to prevent 'cheesing' the game by staying in one spot
+
 document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') {
-        spaceship.angle -= spaceship.rotationSpeed;
+        spaceship.angle -= spaceship.rotationSpeed * (spaceship.speed / 5);
     } else if (e.key === 'ArrowRight') {
-        spaceship.angle += spaceship.rotationSpeed;
+        spaceship.angle += spaceship.rotationSpeed * (spaceship.speed / 5);
     } else if (e.key === 'ArrowUp') {
         spaceship.speed += spaceship.acceleration;
     } else if (e.key === 'ArrowDown') {
@@ -191,9 +194,11 @@ function drawBullets() {
 //checks ALL collisions
 
 function checkCollisions() {
+    // Check bullet collisions with asteroid pieces
     for (let i = 0; i < spaceship.bullets.length; i++) {
         let bullet = spaceship.bullets[i];
-        
+
+        // Check collision with the large asteroid
         if (
             bullet.x > asteroidX &&
             bullet.x < asteroidX + asteroidImage.width &&
@@ -203,9 +208,10 @@ function checkCollisions() {
             spaceship.bullets.splice(i, 1);
             i--;
             breakAsteroid();
-            continue; 
+            continue;
         }
-      
+
+        // Check collision with asteroid pieces
         for (let j = 0; j < asteroidPieces.length; j++) {
             let piece = asteroidPieces[j];
             if (
@@ -219,41 +225,54 @@ function checkCollisions() {
                 console.log("Collision detected!");
                 spaceship.bullets.splice(i, 1);
                 asteroidPieces.splice(j, 1);
-                i--; 
-                break; 
-            } if (
-                spaceship.x > piece.x &&
-                spaceship.x < piece.x + piece.size &&
-                spaceship.y > piece.y &&
-                spaceship.y < piece.y + piece.size) {ctx.drawImage(spaceshipExplosion, spaceship.x - spaceshipExplosion.width / 2, spaceship.y - spaceshipExplosion.height / 2);
-        
-                    setTimeout(() => {
-                        
-                       alert("Game Over! Your score: " + score);
-                    }, 500);
-                     document.location.reload();
-                    
-                    return;}
-
+                i--;
+                break;
+            }
         }
     }
 
-   
+    // Check spaceship collision with asteroid pieces
+    for (let j = 0; j < asteroidPieces.length; j++) {
+        let piece = asteroidPieces[j];
+        if (
+            spaceship.x < piece.x + piece.size &&
+            spaceship.x + spaceship.width > piece.x &&
+            spaceship.y < piece.y + piece.size &&
+            spaceship.y + spaceship.height > piece.y
+        ) {
+            ctx.drawImage(
+                spaceshipExplosion,
+                spaceship.x - spaceshipExplosion.width / 2,
+                spaceship.y - spaceshipExplosion.height / 2
+            );
+
+            setTimeout(() => {
+                alert("Game Over! Your score: " + score);
+            }, 500);
+            document.location.reload();
+
+            return;
+        }
+    }
+
+    // Check spaceship collision with the large asteroid
     if (
         spaceship.x > asteroidX &&
         spaceship.x < asteroidX + asteroidImage.width &&
         spaceship.y > asteroidY &&
-        spaceship.y < asteroidY + asteroidImage.height 
+        spaceship.y < asteroidY + asteroidImage.height
     ) {
-        
-        ctx.drawImage(spaceshipExplosion, spaceship.x - spaceshipExplosion.width / 2, spaceship.y - spaceshipExplosion.height / 2);
-        
+        ctx.drawImage(
+            spaceshipExplosion,
+            spaceship.x - spaceshipExplosion.width / 2,
+            spaceship.y - spaceshipExplosion.height / 2
+        );
+
         setTimeout(() => {
-            
-           alert("Game Over! Your score: " + score);
+            alert("Game Over! Your score: " + score);
         }, 500);
-         document.location.reload();
-        
+        document.location.reload();
+
         return;
     }
 }
@@ -325,6 +344,23 @@ function updateSpaceship() {
     if (spaceship.y < 0) spaceship.y = canvas.height;
 }
 
+//this is the score. it changes the background color depending on your points
+
+function scoreThing() { 
+    if (score == 1000) 
+    {
+        canvas.style.backgroundColor = "lightblue";
+
+    }
+    if (score == 5000) 
+    {
+        canvas.style.backgroundColor = "grey";
+    }
+    if (score == 10000) 
+    {
+        canvas.style.backgroundColor = "yellow";
+    }
+} 
 //updates the game... obviously
 
 function updateGame() {
@@ -334,8 +370,11 @@ function updateGame() {
     drawBullets();
     drawAsteroidPieces();
     checkCollisions();
+    scoreThing();
     updateSpaceship();
     requestAnimationFrame(updateGame);
+    console.log(spaceship.x, spaceship.y);
+    console.log(asteroidPieces);
 }
 
 asteroidImage.onload = () => {
